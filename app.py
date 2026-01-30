@@ -784,7 +784,7 @@ except Exception:
 
 CLIENT_SECRETS_FILE = "client_secret.json"
 SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
-REDIRECT_URI = "http://localhost:8501"
+REDIRECT_URI = "https://wealth-solutions-advisor.streamlit.app/"
 HISTORY_FILE = "client_history.json" # Archivo donde guardaremos los emails
 
 # --- GESTIÓN DE HISTORIAL (NUEVO) ---
@@ -2674,3 +2674,4 @@ else:
 </div>
 
 """, unsafe_allow_html=True)
+
