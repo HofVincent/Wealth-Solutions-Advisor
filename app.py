@@ -11,7 +11,22 @@ from openai import OpenAI
 import base64
 from email.utils import parsedate_to_datetime
 import hmac
+import os
+import json
+import streamlit as st
 
+# --- CÓDIGO NUEVO PARA CREAR EL ARCHIVO JSON DESDE SECRETS ---
+if not os.path.exists("client_secret.json"):
+    try:
+        # Recuperamos el secreto que acabamos de guardar
+        google_creds = st.secrets["GOOGLE_CREDENTIALS"]
+        
+        # Lo escribimos en un archivo temporal para que la librería de Google lo encuentre
+        with open("client_secret.json", "w") as f:
+            f.write(google_creds)
+    except:
+        st.error("No se encontró el secreto GOOGLE_CREDENTIALS en la configuración.")
+# -------------------------------------------------------------
 # =============================================================================
 # COMPONENTES REUTILIZABLES DE UI
 # =============================================================================
@@ -2657,4 +2672,5 @@ else:
         </div>
     </div>
 </div>
+
 """, unsafe_allow_html=True)
