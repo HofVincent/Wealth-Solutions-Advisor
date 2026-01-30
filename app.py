@@ -15,10 +15,10 @@ import os
 import json
 import streamlit as st
 
-# --- CÓDIGO NUEVO PARA CREAR EL ARCHIVO JSON DESDE SECRETS --- Hola
+# --- CÓDIGO NUEVO PARA CREAR EL ARCHIVO JSON DESDE SECRETS ---
 if not os.path.exists("client_secret.json"):
     try:
-        # Recuperamos el secreto que acabamos de guardar
+        # Recuperamos el secreto que acabamos de guardar secreto
         google_creds = st.secrets["GOOGLE_CREDENTIALS"]
         
         # Lo escribimos en un archivo temporal para que la librería de Google lo encuentre
