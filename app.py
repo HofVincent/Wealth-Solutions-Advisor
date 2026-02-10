@@ -38,36 +38,205 @@ MAX_CHARS_FOR_AI = 80000
 # =============================================================================
 st.set_page_config(page_title="Wealth Solutions Advisor", page_icon="🏦", layout="wide", initial_sidebar_state="expanded")
 
-# --- CSS PREMIUM ---
+# --- CSS PREMIUM v2 ---
+# CAMBIO: Jerarquía visual clara para botones (primario/secundario/terciario),
+# fix colores de texto en sidebar, mejor contraste general, link_buttons legibles.
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
+
+    /* === BASE === */
     * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
-    .stApp { background: #fafbfc; }
-    h1, h2, h3 { font-family: 'Playfair Display', serif; color: #1a1d29; font-weight: 600; letter-spacing: -0.02em; }
+    .stApp { background: #f8f9fb; }
+
+    h1, h2, h3 {
+        font-family: 'Playfair Display', serif;
+        color: #1a1d29; font-weight: 600; letter-spacing: -0.02em;
+    }
     h1 { font-size: 42px; } h2 { font-size: 32px; } h3 { font-size: 24px; }
     p, label, .stMarkdown { color: #4a5568; font-weight: 400; line-height: 1.7; }
-    section[data-testid="stSidebar"] { background: #ffffff; border-right: 1px solid #e2e8f0; }
-    section[data-testid="stSidebar"] h1, section[data-testid="stSidebar"] h2, section[data-testid="stSidebar"] h3 { color: #1a1d29; }
-    section[data-testid="stSidebar"] div[role="radiogroup"] { background-color: transparent; display: flex; flex-direction: column; gap: 8px; }
-    section[data-testid="stSidebar"] div[role="radiogroup"] label { background: #f7fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px 16px; transition: all 0.2s ease; }
-    section[data-testid="stSidebar"] div[role="radiogroup"] label[data-checked="true"] { background: #1a1d29; border-color: #1a1d29; color: white; }
-    section[data-testid="stMain"] div[role="radiogroup"] { background: white; border: 1px solid #e2e8f0; padding: 4px; border-radius: 8px; display: flex; gap: 4px; }
-    section[data-testid="stMain"] div[role="radiogroup"] label { flex: 1; text-align: center; background: transparent; border: none; padding: 10px 16px; border-radius: 6px; font-weight: 500; font-size: 14px; transition: all 0.2s ease; }
-    section[data-testid="stMain"] div[role="radiogroup"] label[data-checked="true"] { background: #1a1d29; color: white; font-weight: 600; }
-    .stButton>button { background: #1a1d29; color: white; border: none; border-radius: 6px; padding: 12px 24px; font-weight: 600; font-size: 14px; transition: all 0.2s ease; }
-    .stButton>button:hover { background: #2d3748; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(26,29,41,0.15); }
-    .stButton>button[kind="primary"] { background: linear-gradient(135deg, #1a1d29 0%, #2d3748 100%); }
-    .stTextInput>div>div>input, .stSelectbox>div>div>div { border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px 14px; font-size: 14px; background: white; }
-    .stTextInput>div>div>input:focus { border-color: #1a1d29; box-shadow: 0 0 0 3px rgba(26,29,41,0.1); }
-    .streamlit-expanderHeader { background: white; border: 1px solid #e2e8f0; border-radius: 6px; padding: 14px 18px; }
+
+    /* === SIDEBAR === */
+    section[data-testid="stSidebar"] {
+        background: #ffffff;
+        border-right: 1px solid #e2e8f0;
+    }
+    section[data-testid="stSidebar"] h1,
+    section[data-testid="stSidebar"] h2,
+    section[data-testid="stSidebar"] h3 {
+        color: #1a1d29; font-weight: 600;
+    }
+    /* FIX: Texto sidebar legible (antes había color:white sobre fondo blanco) */
+    section[data-testid="stSidebar"] label,
+    section[data-testid="stSidebar"] .stMarkdown,
+    section[data-testid="stSidebar"] p,
+    section[data-testid="stSidebar"] span {
+        color: #4a5568 !important;
+        font-size: 14px;
+    }
+    /* Radio buttons sidebar */
+    section[data-testid="stSidebar"] div[role="radiogroup"] {
+        background-color: transparent; display: flex; flex-direction: column; gap: 8px;
+    }
+    section[data-testid="stSidebar"] div[role="radiogroup"] label {
+        background: #f7fafc; border: 1px solid #e2e8f0; border-radius: 8px;
+        padding: 12px 16px; transition: all 0.2s ease; cursor: pointer;
+    }
+    section[data-testid="stSidebar"] div[role="radiogroup"] label:hover {
+        background: #edf2f7; border-color: #cbd5e0;
+    }
+    section[data-testid="stSidebar"] div[role="radiogroup"] label[data-checked="true"] {
+        background: #1a1d29; border-color: #1a1d29; color: white !important;
+    }
+    section[data-testid="stSidebar"] div[role="radiogroup"] label[data-checked="true"] span,
+    section[data-testid="stSidebar"] div[role="radiogroup"] label[data-checked="true"] p {
+        color: white !important;
+    }
+
+    /* === TABS HORIZONTALES (main area) === */
+    section[data-testid="stMain"] div[role="radiogroup"] {
+        background: white; border: 1px solid #e2e8f0; padding: 4px;
+        border-radius: 10px; display: flex; gap: 4px;
+    }
+    section[data-testid="stMain"] div[role="radiogroup"] label {
+        flex: 1; text-align: center; background: transparent; border: none;
+        padding: 10px 16px; border-radius: 8px; color: #4a5568;
+        font-weight: 500; font-size: 14px; transition: all 0.2s ease;
+    }
+    section[data-testid="stMain"] div[role="radiogroup"] label:hover {
+        background: #f7fafc; color: #1a1d29;
+    }
+    section[data-testid="stMain"] div[role="radiogroup"] label[data-checked="true"] {
+        background: #1a1d29; color: white !important; font-weight: 600;
+        box-shadow: 0 2px 8px rgba(26,29,41,0.15);
+    }
+
+    /* === BOTONES: JERARQUÍA VISUAL CLARA === */
+
+    /* PRIMARIO: Fondo oscuro, texto blanco — para acciones principales */
+    .stButton>button[kind="primary"],
+    .stButton>button[data-testid="stBaseButton-primary"] {
+        background: linear-gradient(135deg, #004e98 0%, #003d7a 100%) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 8px;
+        padding: 12px 24px;
+        font-weight: 600; font-size: 14px;
+        letter-spacing: 0.3px;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 8px rgba(0,78,152,0.2);
+    }
+    .stButton>button[kind="primary"]:hover,
+    .stButton>button[data-testid="stBaseButton-primary"]:hover {
+        background: linear-gradient(135deg, #003d7a 0%, #002d5e 100%) !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 16px rgba(0,78,152,0.3);
+    }
+
+    /* SECUNDARIO: Borde visible, fondo blanco — para acciones complementarias */
+    .stButton>button[kind="secondary"],
+    .stButton>button[data-testid="stBaseButton-secondary"],
+    .stButton>button:not([kind="primary"]):not([data-testid="stBaseButton-primary"]) {
+        background: white !important;
+        color: #1a1d29 !important;
+        border: 2px solid #cbd5e0 !important;
+        border-radius: 8px;
+        padding: 12px 24px;
+        font-weight: 600; font-size: 14px;
+        transition: all 0.2s ease;
+    }
+    .stButton>button[kind="secondary"]:hover,
+    .stButton>button[data-testid="stBaseButton-secondary"]:hover,
+    .stButton>button:not([kind="primary"]):not([data-testid="stBaseButton-primary"]):hover {
+        background: #f7fafc !important;
+        border-color: #004e98 !important;
+        color: #004e98 !important;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    /* DOWNLOAD BUTTONS: Estilo propio distinguible */
+    .stDownloadButton>button {
+        background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 8px;
+        padding: 12px 24px;
+        font-weight: 600; font-size: 14px;
+        width: 100%;
+        box-shadow: 0 2px 8px rgba(46,125,50,0.2);
+        transition: all 0.2s ease;
+    }
+    .stDownloadButton>button:hover {
+        background: linear-gradient(135deg, #1b5e20 0%, #0d3d13 100%) !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 16px rgba(46,125,50,0.3);
+    }
+
+    /* LINK BUTTONS: Claramente clicables */
+    .stLinkButton>a {
+        background: white !important;
+        color: #004e98 !important;
+        border: 2px solid #004e98 !important;
+        border-radius: 8px;
+        padding: 12px 24px;
+        font-weight: 600; font-size: 14px;
+        text-decoration: none !important;
+        transition: all 0.2s ease;
+        display: inline-block;
+        text-align: center;
+    }
+    .stLinkButton>a:hover {
+        background: #004e98 !important;
+        color: white !important;
+    }
+
+    /* === INPUTS === */
+    .stTextInput>div>div>input,
+    .stSelectbox>div>div>div {
+        border: 1.5px solid #e2e8f0; border-radius: 8px;
+        padding: 10px 14px; font-size: 14px;
+        background: white; transition: all 0.2s ease;
+    }
+    .stTextInput>div>div>input:focus,
+    .stSelectbox>div>div>div:focus {
+        border-color: #004e98;
+        box-shadow: 0 0 0 3px rgba(0,78,152,0.1);
+    }
+
+    /* === EXPANDERS (email cards) === */
+    .streamlit-expanderHeader {
+        background: white; border: 1px solid #e2e8f0; border-radius: 8px;
+        padding: 14px 18px; font-size: 14px;
+        transition: all 0.2s ease;
+    }
+    .streamlit-expanderHeader:hover {
+        background: #f7fafc; border-color: #cbd5e0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    /* === MÉTRICAS === */
     [data-testid="stMetricValue"] { font-size: 28px; font-weight: 600; color: #1a1d29; }
     [data-testid="stMetricLabel"] { font-size: 13px; color: #718096; text-transform: uppercase; letter-spacing: 0.5px; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-    .stMarkdown > div { animation: fadeIn 0.4s ease-out; }
-    ::-webkit-scrollbar { width: 8px; } ::-webkit-scrollbar-track { background: #f7fafc; } ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 4px; }
-    .stDownloadButton>button { background: #1a1d29; color: white; border: none; border-radius: 6px; padding: 12px 24px; font-weight: 600; width: 100%; }
-    .stDownloadButton>button:hover { background: #2d3748; }
+
+    /* === ANIMACIONES === */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(8px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .stMarkdown > div { animation: fadeIn 0.3s ease-out; }
+
+    /* === SCROLLBAR === */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #f7fafc; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #a0aec0; }
+
+    /* === SLIDER === */
+    .stSlider [data-testid="stThumbValue"] { color: #1a1d29; font-weight: 600; }
+
+    /* === TOAST / SUCCESS / WARNING — mejorar contraste === */
+    .stAlert { border-radius: 8px !important; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -672,7 +841,7 @@ if not st.session_state.creds:
         st.markdown("<br>", unsafe_allow_html=True)
         _, auth_url = authorize_google()
         if auth_url:
-            st.link_button("Iniciar Sesion Corporativa", auth_url, type="primary", use_container_width=True)
+            st.link_button("🔐 Iniciar Sesión Corporativa", auth_url, type="primary", use_container_width=True)
         else:
             st.error("Falta client_secret.json")
 
@@ -688,7 +857,7 @@ else:
 </div>
 """, unsafe_allow_html=True)
 
-        st.markdown("### Cartera de Clientes")
+        st.markdown("### 📇 Cartera de Clientes")
         client_history = load_history()
         selected_client = st.selectbox("Seleccionar cliente reciente:", ["Nueva Busqueda"] + client_history, index=0)
         if selected_client != "Nueva Busqueda":
@@ -697,7 +866,7 @@ else:
             st.session_state.default_email = ""
         st.markdown("---")
 
-        st.markdown("### Configuracion de Analisis")
+        st.markdown("### ⚙️ Configuración de Análisis")
         analysis_mode = st.radio("Modo de busqueda:", ["Por numero de emails", "Por rango de fechas"], index=0, key="analysis_mode")
 
         if analysis_mode == "Por numero de emails":
@@ -760,10 +929,10 @@ else:
 <p style='margin:0;font-size:12px;color:#22543d;'>Brief: <strong>{bi['target_email'][:25]}</strong> - {bi['generated_at']}</p>
 </div>
 """, unsafe_allow_html=True)
-            st.download_button("Re-descargar Brief", data=bi['pdf_bytes'], file_name=bi['pdf_filename'], mime="application/pdf", use_container_width=True)
+            st.download_button("⬇️ Re-descargar Brief", data=bi['pdf_bytes'], file_name=bi['pdf_filename'], mime="application/pdf", use_container_width=True)
             st.markdown("---")
 
-        if st.button("Cerrar Sesion", use_container_width=True):
+        if st.button("🚪 Cerrar Sesión", use_container_width=True):
             st.session_state.creds = None
             st.session_state.analysis_results = None
             st.session_state.last_brief = None
@@ -789,9 +958,9 @@ else:
     with c_b:
         col_btn_a, col_btn_b = st.columns(2)
         with col_btn_a:
-            run_btn = st.button("Analizar", type="primary", use_container_width=True)
+            run_btn = st.button("🚀 Analizar", type="primary", use_container_width=True)
         with col_btn_b:
-            brief_btn = st.button("Brief", use_container_width=True, help="Pre-Meeting Brief")
+            brief_btn = st.button("📄 Brief", use_container_width=True, help="Pre-Meeting Brief")
 
     # =================================================================
     # BOTON ANALIZAR
@@ -923,7 +1092,7 @@ else:
 </div>
 """, unsafe_allow_html=True)
                     st.markdown("<br>", unsafe_allow_html=True)
-                    st.download_button("Descargar Brief PDF", data=pdf_bytes, file_name=pdf_filename, mime="application/pdf", use_container_width=True, type="primary")
+                    st.download_button("⬇️ Descargar Brief en PDF", data=pdf_bytes, file_name=pdf_filename, mime="application/pdf", use_container_width=True, type="primary")
             except Exception as e:
                 import traceback
                 show_error_box("Error PDF", str(e), details=traceback.format_exc())
@@ -963,10 +1132,10 @@ else:
 
         with export_col:
             summary_text = generate_analysis_summary_text(data, evidence, st.session_state.analysis_results.get('target_email', ''))
-            st.download_button("Exportar Analisis", data=summary_text, file_name=f"analisis_{datetime.now().strftime('%Y%m%d')}.txt", mime="text/plain", use_container_width=True)
+            st.download_button("⬇️ Exportar Análisis", data=summary_text, file_name=f"analisis_{datetime.now().strftime('%Y%m%d')}.txt", mime="text/plain", use_container_width=True)
 
         st.markdown("<br>", unsafe_allow_html=True)
-        st.markdown("### Historia de la Conversacion")
+        st.markdown("### 📖 Historia de la Conversación")
 
         last_email = evidence[-1]
         if last_email['Origen'] == 'CLIENTE':
@@ -1069,9 +1238,9 @@ else:
         st.markdown("<div style='border-top:2px solid #e0e6ed;margin:20px 0 30px 0;'></div>", unsafe_allow_html=True)
 
         # NAVEGACION
-        NAV_ESTRATEGIA = "Estrategia & Insights"
-        NAV_GENERADOR = "Generador de Respuesta"
-        NAV_EXPLORADOR = "Explorador Avanzado"
+        NAV_ESTRATEGIA = "💡 Estrategia & Insights"
+        NAV_GENERADOR = "✉️ Generador de Respuesta"
+        NAV_EXPLORADOR = "📬 Explorador Avanzado"
 
         selected_view = st.radio("Navegacion", [NAV_ESTRATEGIA, NAV_GENERADOR, NAV_EXPLORADOR], horizontal=True, label_visibility="collapsed", key="navigation_view")
         st.markdown("<br>", unsafe_allow_html=True)
@@ -1085,7 +1254,7 @@ else:
                 st.markdown(f"""
 <div style="background:white;border:1px solid #e2e8f0;padding:28px;border-radius:8px;">
 <p style="color:#2d3748;margin:0 0 24px 0;font-size:15px;line-height:1.7;">{data.get('accion_recomendada', 'Sin accion definida')}</p>
-<a href="https://mail.google.com/mail/?view=cm&fs=1&to={te}&su=Seguimiento" target="_blank" style="display:inline-block;background:#1a1d29;color:white;padding:12px 28px;border-radius:6px;text-decoration:none;font-weight:600;font-size:14px;">Escribir Email</a>
+<a href="https://mail.google.com/mail/?view=cm&fs=1&to={te}&su=Seguimiento" target="_blank" style="display:inline-block;background:linear-gradient(135deg,#004e98,#003d7a);color:white;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px;box-shadow:0 2px 8px rgba(0,78,152,0.2);transition:all 0.2s;">📧 Escribir Email</a>
 </div>
 """, unsafe_allow_html=True)
                 st.markdown("<br>", unsafe_allow_html=True)
@@ -1129,11 +1298,11 @@ else:
             cb1, cb2, cb3 = st.columns([2, 2, 1])
             with cb1:
                 gu = f"https://mail.google.com/mail/?view=cm&fs=1&to={st.session_state.analysis_results.get('target_email', '')}&su=Seguimiento"
-                st.link_button("Abrir en Gmail", gu, use_container_width=True, type="primary")
+                st.link_button("🔗 Abrir en Gmail", gu, use_container_width=True, type="primary")
             with cb2:
-                st.button("Copiar texto", use_container_width=True, key="copy_draft")
+                st.button("📋 Copiar texto", use_container_width=True, key="copy_draft")
             with cb3:
-                st.button("Regenerar", use_container_width=True, help="Regenerar borrador", key="regenerate_draft")
+                st.button("🔄 Regenerar", use_container_width=True, help="Regenerar borrador", key="regenerate_draft")
 
         # VISTA 3: EXPLORADOR
         elif selected_view == NAV_EXPLORADOR:
@@ -1152,7 +1321,7 @@ else:
                 f_fecha = st.selectbox("Fecha", ["Todas", "7 dias", "30 dias"], index=["Todas", "7 dias", "30 dias"].index(st.session_state.f_fecha_key), key="f_fecha_key")
             with fc4:
                 st.markdown("<br>", unsafe_allow_html=True)
-                if st.button("Limpiar", key="clear_filters", use_container_width=True):
+                if st.button("🔄 Limpiar", key="clear_filters", use_container_width=True):
                     st.session_state.f_origen_key = "Todos"
                     st.session_state.f_texto_key = ""
                     st.session_state.f_fecha_key = "Todas"
@@ -1200,7 +1369,7 @@ else:
                         analysis_key = f"thread_analysis_{email['Id']}"
                         with cb1:
                             gu = f"https://mail.google.com/mail/u/0/#inbox/{email['Id_Completo']}"
-                            st.link_button("Abrir en Gmail", gu, use_container_width=True)
+                            st.link_button("🔗 Abrir en Gmail", gu, use_container_width=True)
                         with cb2:
                             bl = "Analisis cargado" if analysis_key in st.session_state else "Analizar Hilo"
                             bt = "secondary" if analysis_key in st.session_state else "primary"
